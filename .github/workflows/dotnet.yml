@@ -33,7 +33,7 @@ jobs:
     - name : coverlet
       uses: b3b00/coverlet-action@1.1.9
       with:
-        testProject: 'SafariPark_Final/SafariParkTests/SafariParkTests.csproj'
+        testProject: './SafariParkTests/SafariParkTests.csproj'
         output: 'lcov.info'
         outputFormat: 'lcov'
         excludes: '[program]*,[test]test.*'
@@ -41,4 +41,4 @@ jobs:
       uses: coverallsapp/github-action@v1.1.1
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: SafariPark_Final/SafariParkTests/lcov.info
+        path-to-lcov: ./SafariParkTests/lcov.info
