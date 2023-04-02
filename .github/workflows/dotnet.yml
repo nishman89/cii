@@ -33,7 +33,7 @@ jobs:
     - name : coverlet
       uses: b3b00/coverlet-action@1.1.9
       with:
-        testProject: './SafariPark_Final/SafariParkTests/SafariParkTests.csproj'
+        testProject: 'SafariPark_Final/SafariParkTests/SafariParkTests.csproj'
         output: 'lcov.info'
         outputFormat: 'lcov'
         excludes: '[program]*,[test]test.*'
