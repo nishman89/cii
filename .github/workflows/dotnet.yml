@@ -1,18 +1,11 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: Build, Run Unit Tests and generate Coverall report
+name: .NET
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
-defaults:
-  run:
-    working-directory: ./SafariPark_Final
-    
+
 jobs:
   build:
 
@@ -21,22 +14,29 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: SafariPark_Final
     - name: Build
       run: dotnet build --no-restore
+      working-directory: SafariPark_Final
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=lcov.info
-    - name: Generate Coverage Report
-      uses: coverallsapp/github-action@v1.11.0
+      run: dotnet test --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=lcov.info
+      #new line
+      working-directory: SafariPark_Final
+
+    - name : coverlet
+      uses: b3b00/coverlet-action@1.1.9
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./SafariParkTests/lcov.info
-        flag-name: test-coverage
-        run-partials: true
-        service-name: github
-        service-job-id: ${{ github.run_id }}
-        fail-on-error: true
+        testProject: 'SafariPark_Final/SafariParkTests/SafariParkTests.csproj'
+        output: 'lcov.info'
+        outputFormat: 'lcov'
+        excludes: '[program]*,[test]test.*'
+    - name: coveralls      
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN }} 
+        path-to-lcov: SafariPark_Final/SafariParkTests/lcov.info
